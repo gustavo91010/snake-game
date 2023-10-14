@@ -36,6 +36,38 @@ const drawSnake = () => {
         contexto.fillRect(position.x, position.y, size, size)
     })
 }
+const drawGrid = () => {
+    // Prepara a linha
+    contexto.lineWidth = 1;
+    contexto.strokeStyle = "#191919"
+
+    // Define posiççao:
+    //contexto.lineTo(60,0)
+    //contexto.lineTo(60,600)
+
+
+    for (let i = 30; i < canvas.width; i += 30) {
+        // Vertical:
+        contexto.beginPath() // Sempre iciciaondo a escrita do mesmo ponto
+
+        contexto.lineTo(i, 0)
+        contexto.lineTo(i, 600)
+
+        // Escreve:
+        contexto.stroke()
+
+        // Horizontal:
+
+        contexto.beginPath() 
+        contexto.lineTo(0,i)
+        contexto.lineTo(600,i)
+        contexto.stroke()
+    }
+
+
+
+}
+
 
 const moveSnake = () => {
     const head = snake[snake.length - 1];
@@ -109,6 +141,7 @@ const moveSnake = () => {
 const gameloop = () => {
     clearInterval(loopId) // limpa pelo id o as threads de timeout que possam ainda esta em uso para que possa chamar uma outra
     contexto.clearRect(0, 0, 600, 600)
+    drawGrid()
     moveSnake()
     drawSnake()
 
@@ -142,29 +175,33 @@ setInterval(() => {
 document.addEventListener("keydown", ({ key }) => {
     //console.log(key.replace('Arrow',""))
 
-    
-    
-    if( key == "ArrowRight" && direction != "Left"){
-       // direction= key.replace('Arrow',"")
-       direction="Right"
-        
-    }
-    if( key == "ArrowLeft" && direction != "Right"){
-        direction="Left"
-
-    }
-    if( key == "ArrowUp" && direction != "Down"){
-        direction="Up"
-    }
-    if( key == "ArrowDown" && direction != "Up"){
-        direction="Down"
-        
-    }
-    
 
 
-  
+    if (key == "ArrowRight" && direction != "Left") {
+        // direction= key.replace('Arrow',"")
+        direction = "Right"
+
+    }
+    if (key == "ArrowLeft" && direction != "Right") {
+        direction = "Left"
+
+    }
+    if (key == "ArrowUp" && direction != "Down") {
+        direction = "Up"
+    }
+    if (key == "ArrowDown" && direction != "Up") {
+        direction = "Down"
+
+    }
+
+
+
+
 
 })
+
+// 
+
+// Start Game!
 
 gameloop()
