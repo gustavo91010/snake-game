@@ -8,16 +8,18 @@ contexto.fillRect(300, 300, 10, 10)// um retantugo nas cordenadas x e y com altu
 */
 const size = 30;
 const snake = [
+    { x: 0, y: 0 },
+
+    /*
     { x: 200, y: 200 },
     { x: 230, y: 200 },
     { x: 260, y: 200 },
 
-    /*
     A cobrinha será um array de posições, pois cada objeto tera a posição x e y*/
 ]
 
 let direction = ""
-
+let loopId
 
 const drawSnake = () => {
     contexto.fillStyle = "#ddd";
@@ -39,31 +41,31 @@ const moveSnake = () => {
     const head = snake[snake.length - 1];
 
     switch (direction) {
-        case "right":
+        case "Right":
             snake.push({
                 x: (head.x + size),
                 y: (head.y)
             })
             break;
-        case"left":
-        snake.push({
-            x: (head.x - size),
-            y: (head.y)
-        })
-        break;
-    case "down":
-        snake.push({
-            x: (head.x),
-            y: (head.y + size)
-        })
-        break;
-    case "up":
-        snake.push({
-            x: (head.x),
-            y: (head.y - size)
-        })
-        break
-    default: return
+        case "Left":
+            snake.push({
+                x: (head.x - size),
+                y: (head.y)
+            })
+            break;
+        case "Down":
+            snake.push({
+                x: (head.x),
+                y: (head.y + size)
+            })
+            break;
+        case "Up":
+            snake.push({
+                x: (head.x),
+                y: (head.y - size)
+            })
+            break
+        default: return
     }
     /** 
      * 
@@ -99,11 +101,70 @@ const moveSnake = () => {
     snake.shift() // remove o primeiro elemento do array, no nosso caso, o ultimo bloco da cobrinha
 }
 
+/**  Responsavel de fazer o jogo funcionar em loop
+ *  gameloop():
+ * ele limpa a tela, faz o move, faz o draw e depois de 3s refaz o processo
+ */
+
+const gameloop = () => {
+    clearInterval(loopId) // limpa pelo id o as threads de timeout que possam ainda esta em uso para que possa chamar uma outra
+    contexto.clearRect(0, 0, 600, 600)
+    moveSnake()
+    drawSnake()
+
+    loopId = setTimeout(() => {
+        gameloop()
+    }, 300)
+    // setTimeout: determina o que ele faz e o intervalo de tempo
+
+}
+/** 
+ * 
 //setInterval é usada para repetir a execução de um bloco de código a cada intervalo de tempo especificado.
 
 setInterval(() => {
     contexto.clearRect(0, 0, 600, 600) // estou limpando o canvas por completo
     moveSnake()
     drawSnake()
-
+    
 }, 1000)
+*/
+
+
+
+/** ############################ interação com as teclas:
+ * document.addEventListener("keydown", (event)=>{
+    console.log(event.key)
+    ArrowUp, ArrowDown, ArrowRight, ArrowLeft
+*/
+
+
+document.addEventListener("keydown", ({ key }) => {
+    //console.log(key.replace('Arrow',""))
+
+    
+    
+    if( key == "ArrowRight" && direction != "Left"){
+       // direction= key.replace('Arrow',"")
+       direction="Right"
+        
+    }
+    if( key == "ArrowLeft" && direction != "Right"){
+        direction="Left"
+
+    }
+    if( key == "ArrowUp" && direction != "Down"){
+        direction="Up"
+    }
+    if( key == "ArrowDown" && direction != "Up"){
+        direction="Down"
+        
+    }
+    
+
+
+  
+
+})
+
+gameloop()
