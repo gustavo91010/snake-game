@@ -6,6 +6,10 @@ const contexto = canvas.getContext("2d");
 contexto.fillStyle= "red" // estilo do preenchimento da figura
 contexto.fillRect(300, 300, 10, 10)// um retantugo nas cordenadas x e y com altura e comprimento de...
 */
+let direction = ""
+let loopId
+
+const audio= new Audio('../assets/audio.mp3')
 const size = 30;
 const snake = [
     { x: 0, y: 0 },
@@ -18,8 +22,64 @@ const snake = [
     A cobrinha será um array de posições, pois cada objeto tera a posição x e y*/
 ]
 
-let direction = ""
-let loopId
+const randomNumber = (min, max) => {
+    return Math.round(Math.random() * (max - min) + min)
+    // o round so pega a parte inteira do mumeto, nesse caso, estou pegando os inteiros gerados pelo random dentro do limite estabelecido
+}
+const randomPosition = () => {
+    const number = randomNumber(0, canvas.width - size);
+    // Transformando o numero aleatorio em multiplos de 30
+    return Math.round(number / 30) * 30
+
+}
+const randomColor = () => {
+    const red = randomNumber(0, 255)
+    const blue = randomNumber(0, 255)
+    const green = randomNumber(0, 255)
+
+    return `rgb(${red}, ${green},${blue})`
+}
+let colorAtual = randomColor()
+
+
+const food = {
+    x: randomPosition(),
+    y: randomPosition(),
+    color: colorAtual
+}
+
+
+
+const chackEat = () => {
+    // Se a posição da cabeça for igual ao da comida, quer dizer que a cobra comeu a comida
+    const head = snake[snake.length - 1];
+    if (head.x == food.x && head.y == food.y) {
+
+        snake.push(head)
+        audio.play()
+
+        // Gerando uma nova comida:
+        colorAtual = randomColor()
+        
+
+        // Verificando se a comida vai ser gerada em alguma posição ja ocupada pela cobra:
+        let x = randomPosition();
+        let y = randomPosition();
+
+        // esse find, ta mais para um filter, ele ta pegando todas as posições da cobrinha e verificando
+        // se tem alguem com a posição x e y iguais a que acabei de gerar, se sim, manda um true e entra no while...
+        // se achar, ele gera novamente o y e x
+        while (snake.find((position) =>position.x == x && position.y == y)){
+             x = randomPosition();
+             y = randomPosition();
+        }
+        food.x= x;
+        food.y = y;
+        food.color = colorAtual
+
+    }
+}
+
 
 const drawSnake = () => {
     contexto.fillStyle = "#ddd";
@@ -29,7 +89,7 @@ const drawSnake = () => {
         if (index == snake.length - 1) {
             // Captura o index, se for o ultimo, a cabeça, mudar ela de cor
             // contexto.fillStyle = "white";
-            contexto.fillStyle = "blue";
+            contexto.fillStyle = colorAtual;
 
 
         }
@@ -58,14 +118,26 @@ const drawGrid = () => {
 
         // Horizontal:
 
-        contexto.beginPath() 
-        contexto.lineTo(0,i)
-        contexto.lineTo(600,i)
+        contexto.beginPath()
+        contexto.lineTo(0, i)
+        contexto.lineTo(600, i)
         contexto.stroke()
     }
 
 
 
+}
+
+const drawFood = () => {
+    const { x, y, color } = food
+
+    contexto.shadowColor = color;
+    contexto.shadowBlur = 20; // Criar um efeito borrado , que deveria ser sómente na comida
+
+    contexto.fillStyle = color;
+    contexto.fillRect(x, y, size, size)
+
+    contexto.shadowBlur = 0; // Depois que eu criar o efeito na comida, eu retiro o efeito para qu eele não se extenda por tdo o tabuleiro
 }
 
 
@@ -141,9 +213,11 @@ const moveSnake = () => {
 const gameloop = () => {
     clearInterval(loopId) // limpa pelo id o as threads de timeout que possam ainda esta em uso para que possa chamar uma outra
     contexto.clearRect(0, 0, 600, 600)
-    drawGrid()
-    moveSnake()
-    drawSnake()
+    drawGrid();
+    drawFood();
+    moveSnake();
+    drawSnake();
+    chackEat();
 
     loopId = setTimeout(() => {
         gameloop()
