@@ -1,21 +1,83 @@
   @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap');
 
-  *{
+  * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", 'sans-serif';
   }
-  body{
+
+  body {
     background-color: #191919;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* altura minima do meu body esta em 100% da altura da tela */
+    min-height:100vh;
+    /* altura minima do meu body esta em 100% da altura da tela */
     align-items: center;
     justify-content: center;
     color: white;
-}
 
-  canvas{
+
+  }
+
+  canvas {
     background-color: #111;
+    width: 50%;
+  }
+
+  .score {
+
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    font-size: 1.8rem;
+
+
+  }
+
+  .score__value {
+    display: flex;
+    font-weight: 700;
+    font-size: 4.5rem;
+    /*
+    display: block;
+    */
+    margin-top: -10px;
+    margin: 0 40px;
+
+  }
+
+  .menu__screen {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .menu__screen__game_over {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 3rem;
+  }
+
+  .menu__screen__final_score {
+    font-weight: 500;
+    font-size: 1.5rem;
+  }
+
+  .menu__screen__jogar_novamente {
+    bottom: none;
+    border-radius: 100px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
   }
