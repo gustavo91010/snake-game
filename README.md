@@ -1,5 +1,8 @@
 # Jogo da Cobrinha (Snake Game)
 
+
+![Snake Game]([[link_da_imagem_do_seu_jogo](https://universoretro.com.br/wp-content/uploads/2021/03/snake.jpg)])
+https://gustavo91010.github.io/snake-game/
 ## Sobre o Projeto
 
 Este projeto é uma implementação clássica do jogo da cobrinha, construído com tecnologias web - HTML, CSS e JavaScript. O jogo faz uso da tag `canvas` para criar o tabuleiro e renderizar os elementos do jogo, proporcionando uma experiência interativa.
